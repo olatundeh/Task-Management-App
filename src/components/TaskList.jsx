@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchTodo } from '../features/taskSlice'
+import { deleteTask, fetchTodo } from '../features/taskSlice'
+import EditTask from './EditTask'
 
 const TaskList = () => {
     const tasks = useSelector((state)=> state.tasks.tasks)
@@ -11,6 +12,10 @@ const TaskList = () => {
     useEffect(()=> {
         dispatch(fetchTodo())
     }, [dispatch])
+
+    const handleDelete = (id)=> {
+        dispatch(deleteTask(id))
+    }
 
     if(loading){
         return <p>Tasks loading...</p>
@@ -32,8 +37,8 @@ const TaskList = () => {
                             <p className='mt-1 text-sm font-semibold'>Status: <span className='italic underline'> {task.status} </span></p>
                         </div>
                         <div className='flex space-x-2'>
-                            <button className='px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-red-600'>Edit</button>
-                            <button className='px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600'>Delete</button>
+                            <EditTask task={task}/>
+                            <button className='px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600' onClick={() => handleDelete(task.id)}>Delete</button>
                         </div>
                     </li>
                 )}
